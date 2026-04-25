@@ -1,0 +1,118 @@
+# ================================
+
+# Visual Studio / .NET
+
+# ================================
+
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build results
+
+bin/
+obj/
+out/
+
+# Logs
+
+*.log
+
+# ================================
+
+# ASP.NET Core
+
+# ================================
+
+appsettings.Development.json
+appsettings.*.json
+
+# نشر السيرفر (لو عندك secrets)
+
+*.pfx
+*.key
+
+# ================================
+
+# Node / React
+
+# ================================
+
+node_modules/
+build/
+dist/
+.next/
+coverage/
+
+# npm / yarn logs
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ================================
+
+# Environment variables
+
+# ================================
+
+.env
+.env.*
+
+# ================================
+
+# OS files
+
+# ================================
+
+# Windows
+
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Mac
+
+.DS_Store
+
+# ================================
+
+# VS Code
+
+# ================================
+
+.vscode/
+
+# ================================
+
+# Package lock (اختياري)
+
+# ================================
+
+# لو شغال team سيبه
+
+# لو لوحدك ممكن تعمله ignore
+
+# package-lock.json
+
+# ================================
+
+# Database (اختياري حسب حالتك)
+
+# ================================
+
+# لو عندك Local DB files
+
+*.mdf
+*.ldf
+
+# ================================
+
+# Temporary files
+
+# ================================
+
+*.tmp
+*.temp
