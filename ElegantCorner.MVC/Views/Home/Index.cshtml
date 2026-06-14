@@ -1,0 +1,108 @@
+﻿@model ElegantCorner.MVC.ViewModels.HomeViewModel
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- Products Section -->
+<section class="products-section">
+    <div class="products-header">
+        <h2 class="products-title" id="productsTitle">@ViewBag.PageTitle</h2>
+        <p class="products-count" id="productsCount">@(Model.Products?.Count() ?? 0) products available</p>
+    </div>
+
+    <div class="products-grid" id="productsGrid">
+    @if (Model.Products != null)
+    {
+        @foreach (var product in Model.Products)
+        {
+            <div class="product-card">
+                <div class="product-image-wrapper" onclick="showProductDetails('@product.Id')">
+                    <img src="@product.ImageUrl" alt="@product.Name" class="product-image">
+                    <button class="product-favorite-btn" onclick="event.stopPropagation(); toggleFavorite('@product.Id')">
+                        <svg class="product-favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name" onclick="showProductDetails('@product.Id')">@product.Name</h3>
+                    <div class="product-rating">
+                        @for (int i = 0; i < 5; i++)
+                        {
+                            <svg class="star-icon @(i < Math.Floor(product.Rating) ? "filled" : "")" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                        }
+                        <span class="product-reviews">(@product.ReviewsCount)</span>
+                    </div>
+                    <div class="product-footer">
+                        <span class="product-price">$@product.Price.ToString("F2")</span>
+                        <button class="product-cart-btn" onclick="addToCart('@product.Id')">
+                            <svg class="product-cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    </div>
+</section>
+
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<!-- Products Section -->
+<section class="products-section">
+    <div class="products-header">
+        <h2 class="products-title" id="productsTitle">@ViewBag.PageTitle</h2>
+        <p class="products-count" id="productsCount">@(Model.Products?.Count() ?? 0) products available</p>
+    </div>
+
+    <div class="products-grid" id="productsGrid">
+    @if (Model.Products != null)
+    {
+        @foreach (var product in Model.Products)
+        {
+            <div class="product-card">
+                <div class="product-image-wrapper" onclick="showProductDetails('@product.Id')">
+                    <img src="@product.ImageUrl" alt="@product.Name" class="product-image">
+                    <button class="product-favorite-btn" onclick="event.stopPropagation(); toggleFavorite('@product.Id')">
+                        <svg class="product-favorite-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name" onclick="showProductDetails('@product.Id')">@product.Name</h3>
+                    <div class="product-rating">
+                        @for (int i = 0; i < 5; i++)
+                        {
+                            <svg class="star-icon @(i < Math.Floor(product.Rating) ? "filled" : "")" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                            </svg>
+                        }
+                        <span class="product-reviews">(@product.ReviewsCount)</span>
+                    </div>
+                    <div class="product-footer">
+                        <span class="product-price">$@product.Price.ToString("F2")</span>
+                        <button class="product-cart-btn" onclick="addToCart('@product.Id')">
+                            <svg class="product-cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    </div>
+</section>
