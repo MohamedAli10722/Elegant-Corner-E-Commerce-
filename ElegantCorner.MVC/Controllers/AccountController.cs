@@ -1,4 +1,4 @@
-﻿using ElegantCorner.Domain.Entities;
+using ElegantCorner.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -8,99 +8,83 @@ namespace ElegantCorner.MVC.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly UserManager<AppUser> _userManager;
+        private readonly UserManager<AppUser>  _userManager;
         private readonly SignInManager<AppUser> _signInManager;
 
         public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
         {
-            _userManager = userManager;
+            _userManager  = userManager;
             _signInManager = signInManager;
         }
 
-        // GET: /Account/Login
-        [HttpGet]
-        public IActionResult Login()
-        {
-            if (User.Identity?.IsAuthenticated ?? false)
-                return RedirectToAction("Index", "Home");
-            return View();
-        }
-
-        // POST: /Account/Login
+        // ── AJAX: POST /Account/Login ─────────────────────────────────────────
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(string email, string password)
+        public async Task<IActionResult> Login([FromBody] LoginRequest req)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(req.Email);
             if (user == null)
-            {
-                ModelState.AddModelError("", "Invalid email or password");
-                return View();
-            }
+                return Unauthorized(new { message = "Invalid email or password" });
 
-            var result = await _signInManager.PasswordSignInAsync(user, password, false, false);
-            if (result.Succeeded)
-            {
-                return RedirectToAction("Index", "Home");
-            }
+            var result = await _signInManager.PasswordSignInAsync(user, req.Password, isPersistent: true, lockoutOnFailure: false);
+            if (!result.Succeeded)
+                return Unauthorized(new { message = "Invalid email or password" });
 
-            ModelState.AddModelError("", "Invalid email or password");
-            return View();
+            return Ok(new { displayName = user.DisplayName, email = user.Email });
         }
 
-        // GET: /Account/Register
-        [HttpGet]
-        public IActionResult Register()
-        {
-            if (User.Identity?.IsAuthenticated ?? false)
-                return RedirectToAction("Index", "Home");
-            return View();
-        }
-
-        // POST: /Account/Register
+        // ── AJAX: POST /Account/Register ──────────────────────────────────────
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(string displayName, string email, string password, string confirmPassword)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest req)
         {
-            if (password != confirmPassword)
-            {
-                ModelState.AddModelError("", "Passwords do not match");
-                return View();
-            }
+            if (req.Password != req.ConfirmPassword)
+                return BadRequest(new { message = "Passwords do not match" });
 
-            var user = new AppUser { UserName = email, Email = email, DisplayName = displayName };
-            var result = await _userManager.CreateAsync(user, password);
+            var existing = await _userManager.FindByEmailAsync(req.Email);
+            if (existing != null)
+                return BadRequest(new { message = "Email already exists" });
 
-            if (result.Succeeded)
+            var user = new AppUser
             {
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("Index", "Home");
-            }
+                DisplayName = req.DisplayName,
+                Email       = req.Email,
+                UserName    = req.Email
+            };
 
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError("", error.Description);
-            }
-            return View();
+            var result = await _userManager.CreateAsync(user, req.Password);
+            if (!result.Succeeded)
+                return BadRequest(new { message = result.Errors.First().Description });
+
+            await _signInManager.SignInAsync(user, isPersistent: true);
+            return Ok(new { displayName = user.DisplayName, email = user.Email });
         }
 
-        // POST: /Account/Logout
+        // ── AJAX: POST /Account/Logout ────────────────────────────────────────
         [HttpPost]
         [Authorize]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return Ok();
         }
 
-        // GET: /Account/Profile
-        [Authorize]
-        public async Task<IActionResult> Profile()
+        // ── AJAX: GET /Account/CurrentUser ────────────────────────────────────
+        // Called by JS on every page load to restore UI state without a page reload
+        [HttpGet]
+        public IActionResult CurrentUser()
         {
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) return NotFound();
-            return View(user);
+            if (!(User.Identity?.IsAuthenticated ?? false))
+                return Ok(new { isAuthenticated = false });
+
+            return Ok(new
+            {
+                isAuthenticated = true,
+                displayName     = User.FindFirstValue(ClaimTypes.Name),
+                email           = User.FindFirstValue(ClaimTypes.Email)
+            });
         }
     }
+
+    // ── Request models ────────────────────────────────────────────────────────
+    public record LoginRequest(string Email, string Password);
+    public record RegisterRequest(string DisplayName, string Email, string Password, string ConfirmPassword);
 }

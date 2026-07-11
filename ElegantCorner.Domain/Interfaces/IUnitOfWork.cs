@@ -4,8 +4,8 @@ namespace ElegantCorner.Domain.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        IGenericRepository<Category> Categories { get; }
-        IGenericRepository<Product> Products { get; }
+        ICategoryRepository Categories { get; }
+        public IProductRepository Products { get; }
         IGenericRepository<Cart> Carts { get; }
         IGenericRepository<CartItem> CartItems { get; }
         IGenericRepository<Order> Orders { get; }

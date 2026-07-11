@@ -8,8 +8,8 @@ namespace ElegantCorner.Infrastructure.Repositories
     {
         private readonly AppDbContext _context;
 
-        public IGenericRepository<Category> Categories { get; private set; }
-        public IGenericRepository<Product> Products { get; private set; }
+        public ICategoryRepository Categories { get; private set; }
+        public IProductRepository Products { get; private set; }
         public IGenericRepository<Cart> Carts { get; private set; }
         public IGenericRepository<CartItem> CartItems { get; private set; }
         public IGenericRepository<Order> Orders { get; private set; }
@@ -18,8 +18,8 @@ namespace ElegantCorner.Infrastructure.Repositories
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
-            Categories = new GenericRepository<Category>(context);
-            Products = new GenericRepository<Product>(context);
+            Categories = new CategoryRepository(context);
+            Products = new ProductRepository(context);
             Carts = new GenericRepository<Cart>(context);
             CartItems = new GenericRepository<CartItem>(context);
             Orders = new GenericRepository<Order>(context);

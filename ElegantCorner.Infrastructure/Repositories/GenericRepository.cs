@@ -27,6 +27,19 @@ namespace ElegantCorner.Infrastructure.Repositories
         public async Task<IEnumerable<T>> GetAllAsync()
             => await _dbSet.ToListAsync();
 
+        public async Task<T?> GetByIdWithIncludeAsync(
+    Guid id,
+    params Expression<Func<T, object>>[] includes)
+        {
+            IQueryable<T> query = _dbSet;
+
+            foreach (var include in includes)
+                query = query.Include(include);
+
+            return await query.FirstOrDefaultAsync(e =>
+                EF.Property<Guid>(e, "Id") == id);
+        }
+
         public async Task<T?> GetByIdAsync(Guid id)
             => await _dbSet.FindAsync(id);
 

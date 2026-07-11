@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1" />
+
+    <title>@ViewData["Title"] - Admin</title>
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/css/admin.css"
+          asp-append-version="true" />
+
+</head>
+
+<body class="admin-body">
+
+    <div class="admin-wrapper">
+
+        <partial name="Admin/_Sidebar" />
+
+        <div class="admin-main">
+
+            <partial name="Admin/_Navbar" />
+
+            <main class="admin-content">
+
+                @RenderBody()
+
+            </main>
+
+            <partial name="Admin/_Footer" />
+
+        </div>
+
+    </div>
+
+    <script src="~/js/admin.js"
+            asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+
+</html>

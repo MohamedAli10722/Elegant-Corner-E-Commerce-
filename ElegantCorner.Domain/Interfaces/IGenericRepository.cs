@@ -6,6 +6,7 @@ namespace ElegantCorner.Domain.Interfaces
     {
         Task<IEnumerable<T>> GetAllAsync();
         Task<IEnumerable<T>> GetAllWithIncludeAsync(params Expression<Func<T, object>>[] includes);
+        Task<T?> GetByIdWithIncludeAsync(Guid id, params Expression<Func<T, object>>[] includes);
         Task<T?> GetByIdAsync(Guid id);
         Task AddAsync(T entity);
         void Update(T entity);

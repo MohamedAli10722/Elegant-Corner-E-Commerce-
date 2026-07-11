@@ -1,0 +1,81 @@
+﻿@{
+    var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+    var action = ViewContext.RouteData.Values["action"]?.ToString();
+
+    string IsActive(string c, string? a = null)
+    {
+        if (controller != c)
+            return "";
+
+        if (a == null)
+            return "active";
+
+        return action == a ? "active" : "";
+    }
+}
+
+<aside class="sidebar">
+
+    <div class="sidebar-header">
+
+        <h2>Elegant Corner</h2>
+
+        <span>Admin Panel</span>
+
+    </div>
+
+    <nav class="sidebar-menu">
+
+        <a asp-controller="Admin"
+           asp-action="Dashboard"
+           class="@IsActive("Admin", "Dashboard")">
+
+            <span>🏠</span>
+
+            Dashboard
+
+        </a>
+
+        <a asp-controller="Admin"
+           asp-action="Categories"
+           class="@IsActive("Admin", "Categories")">
+
+            <span>📂</span>
+
+            Categories
+
+        </a>
+
+        <a asp-controller="Admin"
+           asp-action="Products"
+           class="@IsActive("Admin", "Products")">
+
+            <span>🛋️</span>
+
+            Products
+
+        </a>
+
+        <a asp-controller="Admin"
+           asp-action="Orders"
+           class="@IsActive("Admin", "Orders")">
+
+            <span>🛒</span>
+
+            Orders
+
+        </a>
+
+        <a asp-controller="Admin"
+           asp-action="Settings"
+           class="@IsActive("Admin", "Settings")">
+
+            <span>⚙️</span>
+
+            Settings
+
+        </a>
+
+    </nav>
+
+</aside>

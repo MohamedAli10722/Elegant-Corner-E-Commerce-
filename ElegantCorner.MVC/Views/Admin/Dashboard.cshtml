@@ -1,0 +1,43 @@
+﻿@using ElegantCorner.MVC.Models.ViewModels.Admin
+@model DashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="stats-grid">
+
+    <div class="stat-card">
+
+        <h4>Categories</h4>
+
+        <h2>@Model.CategoriesCount</h2>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h4>Products</h4>
+
+        <h2>@Model.ProductsCount</h2>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h4>Orders</h4>
+
+        <h2>@Model.OrdersCount</h2>
+
+    </div>
+
+    <div class="stat-card">
+
+        <h4>Users</h4>
+
+        <h2>@Model.UsersCount</h2>
+
+    </div>
+
+</div>

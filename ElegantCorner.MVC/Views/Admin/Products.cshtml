@@ -1,0 +1,69 @@
+﻿@model IEnumerable<ElegantCorner.MVC.Models.ViewModels.Product.ProductListViewModel>
+
+@{
+    ViewData["Title"] = "Products";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+
+    <div>
+
+        <h2>Products</h2>
+
+        <p>Manage your products</p>
+
+    </div>
+
+    <a asp-action="CreateProduct"
+       class="btn-add">
+
+        + Add Product
+
+    </a>
+
+</div>
+
+<div class="category-grid">
+
+    @foreach (var item in Model)
+    {
+        <div class="category-card">
+
+            <img src="@item.ImageUrl"
+                 onerror="this.src='/images/no-image.png'">
+
+            <div class="category-body">
+
+                <h3>@item.Name</h3>
+
+                <p>@item.CategoryName</p>
+
+                <h5>$ @item.Price</h5>
+
+                <div class="category-actions">
+
+                    <a asp-action="EditProduct"
+                       asp-route-id="@item.Id"
+                       class="btn btn-warning btn-sm">
+
+                        <i class="bi bi-pencil-square"></i>
+
+                    </a>
+
+                    <a asp-action="DeleteProduct"
+                       asp-route-id="@item.Id"
+                       class="btn-delete">
+
+                        Delete
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+    }
+
+</div>
