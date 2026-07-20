@@ -5,9 +5,9 @@ function showNotification(message, type = 'success') {
     document.querySelectorAll('.notification').forEach(n => n.remove());
 
     const colors = {
-        success: { bg: '#10b981', icon: '✓' },
-        error: { bg: '#ef4444', icon: '✗' },
-        info: { bg: '#2563eb', icon: 'ℹ' },
+        success: { bg: 'var(--ec-success)', icon: '✓' },
+        error: { bg: 'var(--ec-danger)', icon: '✗' },
+        info: { bg: 'var(--ec-brass-deep)', icon: 'ℹ' },
         warning: { bg: '#f59e0b', icon: '⚠' }
     };
     const { bg, icon } = colors[type] || colors.success;
@@ -23,7 +23,7 @@ function showNotification(message, type = 'success') {
         display:flex;align-items:center;gap:0.6rem;
         font-size:0.95rem;font-weight:600;z-index:9999;
         transition:transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
-        white-space:nowrap;max-width:90vw;`;
+        white-space:normal;max-width:min(90vw, 26rem);width:max-content;`;
     el.querySelector('.notification-icon').style.cssText = `
         width:1.4rem;height:1.4rem;background:rgba(255,255,255,0.25);
         border-radius:50%;display:flex;align-items:center;
@@ -48,20 +48,20 @@ function showConfirm(message, onConfirm) {
         display:flex;align-items:center;justify-content:center;
         background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);`;
     el.innerHTML = `
-        <div style="background:#fff;border-radius:1rem;padding:2rem;max-width:360px;
-                    width:90%;box-shadow:0 25px 50px rgba(0,0,0,0.2);text-align:center;">
-            <div style="width:3rem;height:3rem;background:#fef2f2;border-radius:50%;
+        <div style="background:var(--ec-surface);border-radius:var(--ec-radius-lg);padding:2rem;max-width:360px;
+                    width:90%;box-shadow:var(--ec-shadow-lg);text-align:center;">
+            <div style="width:3rem;height:3rem;background:var(--ec-brass-light);border-radius:50%;
                         display:flex;align-items:center;justify-content:center;
                         margin:0 auto 1rem;font-size:1.25rem;">👤</div>
-            <p style="color:#111;font-weight:600;font-size:1rem;margin-bottom:0.5rem;">${message}</p>
-            <p style="color:#6b7280;font-size:0.875rem;margin-bottom:1.5rem;">This will clear your session.</p>
+            <p style="color:var(--ec-text);font-weight:600;font-size:1rem;margin-bottom:0.5rem;">${message}</p>
+            <p style="color:var(--ec-text-soft);font-size:0.875rem;margin-bottom:1.5rem;">This will clear your session.</p>
             <div style="display:flex;gap:0.75rem;">
-                <button id="confirmCancel" style="flex:1;padding:0.75rem;border:1.5px solid #d1d5db;
-                        border-radius:0.5rem;background:none;font-size:0.95rem;font-weight:600;cursor:pointer;">
+                <button id="confirmCancel" style="flex:1;padding:0.75rem;border:1.5px solid var(--ec-border);
+                        border-radius:var(--ec-radius-sm);background:none;font-size:0.95rem;font-weight:600;cursor:pointer;">
                     Cancel
                 </button>
-                <button id="confirmOk" style="flex:1;padding:0.75rem;border:none;border-radius:0.5rem;
-                        background:#ef4444;color:white;font-size:0.95rem;font-weight:600;cursor:pointer;">
+                <button id="confirmOk" style="flex:1;padding:0.75rem;border:none;border-radius:var(--ec-radius-sm);
+                        background:var(--ec-danger);color:white;font-size:0.95rem;font-weight:600;cursor:pointer;">
                     Logout
                 </button>
             </div>
@@ -144,7 +144,7 @@ async function apiFetch(url, options = {}) {
 function initUserButton() {
     if (!userBtn) return;
     if (isAuthenticated) {
-        userBtn.style.color = '#3b82f6';
+        userBtn.style.color = 'var(--ec-brass)';
         userBtn.title = serverDisplayName ?? 'Account';
     }
     userBtn.addEventListener('click', () => {

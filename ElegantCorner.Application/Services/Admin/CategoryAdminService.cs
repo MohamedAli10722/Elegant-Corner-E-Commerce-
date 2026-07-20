@@ -77,10 +77,15 @@ public class CategoryAdminService : ICategoryAdminService
 
     public async Task DeleteAsync(Guid id)
     {
-        var category = await _unitOfWork.Categories.GetByIdAsync(id);
+        var category = await _unitOfWork.Categories.GetByIdWithProductsAsync(id);
 
         if (category == null)
             return;
+
+        foreach (var product in category.Products.ToList())
+        {
+            _unitOfWork.Products.Delete(product);
+        }
 
         _unitOfWork.Categories.Delete(category);
         await _unitOfWork.SaveChangesAsync();

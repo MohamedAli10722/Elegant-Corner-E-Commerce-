@@ -1,20 +1,29 @@
 // ═══════════════════════════════════════════════════════════════
 // HOME PAGE — reads data injected by the Razor view
 // ═══════════════════════════════════════════════════════════════
-let categories       = window.__CATEGORIES__ ?? [];
-let products         = window.__PRODUCTS__   ?? [];
+let categories = window.__CATEGORIES__ ?? [];
+let products = window.__PRODUCTS__ ?? [];
 let selectedCategory = null;
 
 // ═══════════════════════════════════════════════════════════════
 // RENDER CATEGORIES
 // ═══════════════════════════════════════════════════════════════
 function renderCategories() {
-    const mobileEl   = document.getElementById('categoriesMobile');
-    const desktopEl  = document.getElementById('categoriesDesktop');
-    const viewAllBtn = document.getElementById('viewAllBtn');
+    const mobileEl = document.getElementById('categoriesMobile');
+    const desktopEl = document.getElementById('categoriesDesktop');
     if (!mobileEl || !desktopEl) return;
 
-    mobileEl.innerHTML = categories.map(cat => `
+    const allActive = selectedCategory === null;
+
+    const allBtnMobile = `
+        <button class="category-btn-mobile ${allActive ? 'active' : ''}" onclick="selectCategory(null)">
+            <svg class="category-icon-mobile" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                ${getIcon('frame')}
+            </svg>
+            <span class="category-name-mobile">All</span>
+        </button>`;
+
+    mobileEl.innerHTML = allBtnMobile + categories.map(cat => `
         <button class="category-btn-mobile ${selectedCategory === cat.id ? 'active' : ''}"
                 onclick="selectCategory('${cat.id}')">
             <svg class="category-icon-mobile" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -23,32 +32,34 @@ function renderCategories() {
             <span class="category-name-mobile">${cat.name}</span>
         </button>`).join('');
 
-    desktopEl.innerHTML = categories.map(cat => `
+    const allBtnDesktop = `
+        <button class="category-card ${allActive ? 'active' : ''}" onclick="selectCategory(null)">
+            <div class="category-image-wrapper category-image-wrapper--icon">
+                <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    ${getIcon('frame')}
+                </svg>
+            </div>
+            <h3 class="category-name">All Products</h3>
+        </button>`;
+
+    desktopEl.innerHTML = allBtnDesktop + categories.map(cat => `
         <button class="category-card ${selectedCategory === cat.id ? 'active' : ''}"
                 onclick="selectCategory('${cat.id}')">
             <div class="category-image-wrapper">
                 <img src="${cat.imageUrl || 'https://images.unsplash.com/photo-1465161191540-aac346fcbaff?w=400'}"
                      alt="${cat.name}" class="category-image">
-                <div class="category-overlay"></div>
-                <div class="category-content">
-                    <svg class="category-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        ${getIcon(cat.icon)}
-                    </svg>
-                    <h3 class="category-name">${cat.name}</h3>
-                </div>
             </div>
+            <h3 class="category-name">${cat.name}</h3>
         </button>`).join('');
-
-    selectedCategory ? viewAllBtn?.classList.remove('hidden') : viewAllBtn?.classList.add('hidden');
 }
 
 // ═══════════════════════════════════════════════════════════════
 // RENDER PRODUCTS GRID  (replaces server-rendered HTML after filter)
 // ═══════════════════════════════════════════════════════════════
 function renderProducts() {
-    const grid     = document.getElementById('productsGrid');
-    const titleEl  = document.getElementById('productsTitle');
-    const countEl  = document.getElementById('productsCount');
+    const grid = document.getElementById('productsGrid');
+    const titleEl = document.getElementById('productsTitle');
+    const countEl = document.getElementById('productsCount');
     if (!grid) return;
 
     if (selectedCategory) {
@@ -135,9 +146,9 @@ async function selectCategory(categoryId) {
     selectedCategory = (selectedCategory === categoryId) ? null : categoryId;
     renderCategories();
 
-    const url      = selectedCategory ? `/Home/Products?categoryId=${selectedCategory}` : '/Home/Products';
+    const url = selectedCategory ? `/Home/Products?categoryId=${selectedCategory}` : '/Home/Products';
     const response = await fetch(url);
-    products       = await response.json();
+    products = await response.json();
     renderProducts();
 }
 
@@ -150,13 +161,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update count text to match server-rendered product count
     const countEl = document.getElementById('productsCount');
     if (countEl) countEl.textContent = `${products.length} products available`;
-
-    // View All button resets category filter
-    document.getElementById('viewAllBtn')?.addEventListener('click', async () => {
-        selectedCategory = null;
-        renderCategories();
-        const res = await fetch('/Home/Products');
-        products   = await res.json();
-        renderProducts();
-    });
 });

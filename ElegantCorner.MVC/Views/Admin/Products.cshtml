@@ -16,7 +16,7 @@
     </div>
 
     <a asp-action="CreateProduct"
-       class="btn-add">
+       class="btn btn-primary btn-sm">
 
         + Add Product
 
@@ -30,8 +30,13 @@
     {
         <div class="category-card">
 
-            <img src="@item.ImageUrl"
-                 onerror="this.src='/images/no-image.png'">
+            <div class="category-image">
+
+                <img src="@item.ImageUrl"
+                     alt="@item.Name"
+                     onerror="this.src='/images/no-image.png'" />
+
+            </div>
 
             <div class="category-body">
 
@@ -48,16 +53,22 @@
                        class="btn btn-warning btn-sm">
 
                         <i class="bi bi-pencil-square"></i>
+                        Edit
 
                     </a>
 
-                    <a asp-action="DeleteProduct"
-                       asp-route-id="@item.Id"
-                       class="btn-delete">
+                    <form asp-action="DeleteProduct"
+                          asp-route-id="@item.Id"
+                          method="post"
+                          style="display:contents"
+                          onsubmit="return confirm('Delete this product? This cannot be undone.');">
 
-                        Delete
+                        <button type="submit" class="btn btn-danger btn-sm">
+                            <i class="bi bi-trash"></i>
+                            Delete
+                        </button>
 
-                    </a>
+                    </form>
 
                 </div>
 

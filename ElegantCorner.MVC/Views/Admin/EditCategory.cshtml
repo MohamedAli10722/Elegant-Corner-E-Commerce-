@@ -1,7 +1,7 @@
-﻿@model ElegantCorner.MVC.Models.ViewModels.CreateCategoryViewModel
+﻿@model ElegantCorner.MVC.Models.ViewModels.EditCategoryViewModel
 
 @{
-    ViewData["Title"] = "Add Category";
+    ViewData["Title"] = "Edit Category";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -9,9 +9,9 @@
 
     <div class="page-title">
 
-        <h1>Add Category</h1>
+        <h1>Edit Category</h1>
 
-        <p>Create a new category for your store.</p>
+        <p>Update this category's details.</p>
 
     </div>
 
@@ -26,9 +26,12 @@
 
 <div class="admin-card">
 
-    <form asp-action="CreateCategory"
+    <form asp-action="EditCategory"
           method="post"
           enctype="multipart/form-data">
+
+        <input asp-for="Id" type="hidden" />
+        <input asp-for="ExistingImageUrl" type="hidden" />
 
         <div class="form-layout">
 
@@ -93,9 +96,9 @@
 
                         <h3>📁</h3>
 
-                        <strong>Choose Image</strong>
+                        <strong>Choose New Image</strong>
 
-                        <span>Click here to upload</span>
+                        <span>Click here to replace</span>
 
                     </label>
 
@@ -104,7 +107,7 @@
                 <div class="preview-image">
 
                     <img id="previewImage"
-                         src="/images/no-image.png"
+                         src="@(string.IsNullOrEmpty(Model.ExistingImageUrl) ? "/images/no-image.png" : Model.ExistingImageUrl)"
                          alt="Preview" />
 
                 </div>
@@ -125,7 +128,7 @@
             <button type="submit"
                     class="btn btn-primary">
 
-                Save Category
+                Save Changes
 
             </button>
 

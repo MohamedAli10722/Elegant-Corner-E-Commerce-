@@ -91,6 +91,64 @@ namespace ElegantCorner.MVC.Controllers
             return RedirectToAction(nameof(Categories));
         }
 
+        // GET
+        [HttpGet]
+        public async Task<IActionResult> EditCategory(Guid id)
+        {
+            var category = await _categoryService.GetByIdAsync(id);
+
+            if (category == null)
+                return NotFound();
+
+            var vm = new EditCategoryViewModel
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Description = category.Description,
+                Icon = category.Icon,
+                ExistingImageUrl = category.ImageUrl
+            };
+
+            return View(vm);
+        }
+
+        // POST
+        [HttpPost]
+        public async Task<IActionResult> EditCategory(EditCategoryViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var imageUrl = model.ExistingImageUrl;
+
+            if (model.Image != null)
+                imageUrl = await _imageService.UploadAsync(model.Image, "categories");
+
+            var dto = new CreateCategoryDto
+            {
+                Name = model.Name,
+                Description = model.Description,
+                Icon = model.Icon,
+                ImageUrl = imageUrl
+            };
+
+            var updated = await _categoryService.UpdateAsync(model.Id, dto);
+
+            if (!updated)
+                return NotFound();
+
+            return RedirectToAction(nameof(Categories));
+        }
+
+        // POST
+        [HttpPost]
+        public async Task<IActionResult> DeleteCategory(Guid id)
+        {
+            await _categoryService.DeleteAsync(id);
+
+            return RedirectToAction(nameof(Categories));
+        }
+
         public async Task<IActionResult> Products()
         {
             var products = await _productAdminService.GetAllAsync();
@@ -223,6 +281,15 @@ namespace ElegantCorner.MVC.Controllers
             };
 
             await _productAdminService.UpdateAsync(dto);
+
+            return RedirectToAction(nameof(Products));
+        }
+
+        // POST
+        [HttpPost]
+        public async Task<IActionResult> DeleteProduct(Guid id)
+        {
+            await _productAdminService.DeleteAsync(id);
 
             return RedirectToAction(nameof(Products));
         }

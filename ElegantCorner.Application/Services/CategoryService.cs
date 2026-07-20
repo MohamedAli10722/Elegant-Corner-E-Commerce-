@@ -77,8 +77,14 @@ namespace ElegantCorner.Application.Services
 
         public async Task<bool> DeleteAsync(Guid id)
         {
-            var category = await _uow.Categories.GetByIdAsync(id);
+            var category = await _uow.Categories.GetByIdWithProductsAsync(id);
             if (category == null) return false;
+
+            foreach (var product in category.Products.ToList())
+            {
+                _uow.Products.Delete(product);
+            }
+
             _uow.Categories.Delete(category);
             await _uow.SaveChangesAsync();
             return true;
