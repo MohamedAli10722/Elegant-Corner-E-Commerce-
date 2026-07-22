@@ -17,6 +17,15 @@
           href="~/css/admin.css"
           asp-append-version="true" />
 
+    <!-- Set theme before first paint to avoid a flash of the wrong theme -->
+    <script>
+        (function () {
+            var saved = localStorage.getItem('ec-theme');
+            var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
+
 </head>
 
 <body class="admin-body">
@@ -43,6 +52,74 @@
 
     <script src="~/js/admin.js"
             asp-append-version="true"></script>
+
+    <script>
+        (function () {
+            var menuBtn = document.getElementById('adminMenuToggleBtn');
+            var sidebar = document.getElementById('adminSidebar');
+            var overlay = document.getElementById('adminSidebarOverlay');
+            if (!menuBtn || !sidebar || !overlay) { return; }
+
+            function openDrawer() {
+                sidebar.classList.add('open');
+                overlay.classList.add('open');
+                menuBtn.setAttribute('aria-expanded', 'true');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeDrawer() {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('open');
+                menuBtn.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+            }
+
+            menuBtn.addEventListener('click', function () {
+                if (sidebar.classList.contains('open')) { closeDrawer(); } else { openDrawer(); }
+            });
+
+            overlay.addEventListener('click', closeDrawer);
+
+            // Close the drawer after navigating to a section on mobile
+            sidebar.querySelectorAll('a').forEach(function (link) {
+                link.addEventListener('click', closeDrawer);
+            });
+
+            // Close if the viewport is resized back up to desktop/tablet width
+            window.addEventListener('resize', function () {
+                if (window.innerWidth > 768) { closeDrawer(); }
+            });
+        })();
+    </script>
+
+    <script>
+        (function () {
+            var toggleBtn = document.getElementById('adminThemeToggleBtn');
+            var sunIcon = document.getElementById('adminThemeIconSun');
+            var moonIcon = document.getElementById('adminThemeIconMoon');
+            if (!toggleBtn) { return; }
+
+            function updateIcon(theme) {
+                if (theme === 'dark') {
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = '';
+                } else {
+                    sunIcon.style.display = '';
+                    moonIcon.style.display = 'none';
+                }
+            }
+
+            updateIcon(document.documentElement.getAttribute('data-theme') || 'light');
+
+            toggleBtn.addEventListener('click', function () {
+                var current = document.documentElement.getAttribute('data-theme') || 'light';
+                var next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('ec-theme', next);
+                updateIcon(next);
+            });
+        })();
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 

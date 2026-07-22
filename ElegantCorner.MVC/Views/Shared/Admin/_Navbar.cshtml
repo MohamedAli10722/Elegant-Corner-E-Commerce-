@@ -1,21 +1,104 @@
-﻿<nav class="admin-navbar">
+﻿<header class="admin-navbar">
 
-    <div>
+    <div style="display:flex; align-items:center; gap:14px; min-width:0;">
+
+        <!-- Hamburger: only visible on mobile, opens the sidebar drawer -->
+        <button id="adminMenuToggleBtn"
+                class="admin-menu-toggle"
+                aria-label="Toggle menu"
+                aria-expanded="false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round" />
+            </svg>
+        </button>
 
         <h3>@ViewData["Title"]</h3>
 
     </div>
 
-    <div class="admin-user">
+    <div style="display:flex; align-items:center; gap:16px;">
 
-        Hello,
+        <!-- Return to storefront -->
+        <a asp-controller="Home"
+           asp-action="Index"
+           class="btn btn-secondary btn-sm"
+           style="display:flex; align-items:center; gap:6px; white-space:nowrap;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12l9-9 9 9" stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            @* <span>Return to Site</span> *@
+        </a>
 
-        <strong>
+        <!-- Theme toggle -->
+        <button id="adminThemeToggleBtn" class="icon-btn" aria-label="Toggle dark mode">
+            <svg id="adminThemeIconSun" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+            </svg>
+            <svg id="adminThemeIconMoon" class="icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </button>
 
-            @User.Identity?.Name
+        <!-- Signed-in admin user -->
+        @{
+            var userName = User.Identity?.Name ?? "Admin";
+            var userEmail = User.FindFirst(System.Security.Claims.ClaimTypes.Email)?.Value ?? "No email on file";
+            var userInitial = userName.Length > 0 ? userName.Substring(0, 1).ToUpper() : "A";
+        }
+        <div class="admin-user-menu">
 
-        </strong>
+            <button id="adminUserAvatarBtn"
+                    class="admin-user-avatar"
+                    type="button"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    aria-label="Account menu">
+                @userInitial
+            </button>
+
+            <div id="adminUserPopover" class="admin-user-popover hidden" role="dialog" aria-label="Account details">
+                <div class="admin-user-popover-avatar">@userInitial</div>
+                <div class="admin-user-popover-name">@userName</div>
+                <div class="admin-user-popover-email">@userEmail</div>
+            </div>
+
+        </div>
 
     </div>
 
-</nav>
+</header>
+
+<script>
+    (function () {
+        var btn = document.getElementById('adminUserAvatarBtn');
+        var popover = document.getElementById('adminUserPopover');
+        if (!btn || !popover) { return; }
+
+        function openPopover() {
+            popover.classList.remove('hidden');
+            btn.setAttribute('aria-expanded', 'true');
+        }
+
+        function closePopover() {
+            popover.classList.add('hidden');
+            btn.setAttribute('aria-expanded', 'false');
+        }
+
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            if (popover.classList.contains('hidden')) { openPopover(); } else { closePopover(); }
+        });
+
+        // Close when clicking anywhere outside the popover/button
+        document.addEventListener('click', function (e) {
+            if (!popover.contains(e.target) && e.target !== btn) { closePopover(); }
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') { closePopover(); }
+        });
+    })();
+</script>

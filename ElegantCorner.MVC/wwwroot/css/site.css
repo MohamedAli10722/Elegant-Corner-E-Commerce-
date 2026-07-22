@@ -7,39 +7,83 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-    /* Brand */
-    --ec-ink: #171a21;
-    --ec-ink-soft: #232733;
-    --ec-brass: #b8863b;
-    --ec-brass-light: #f0dcb8;
-    --ec-brass-deep: #96692a;
-    /* Neutrals */
-    --ec-bg: #f4f3f0;
+    /* Brand accent — sage green, same in both themes */
+    --ec-brass: #a9c5a0;
+    --ec-brass-light: #e3ecdf;
+    --ec-brass-deep: #6f9463;
+    --ec-brass-rgb: 169, 197, 160;
+    /* Dark surfaces (sidebar/header ink) */
+    --ec-ink: #1a1a1a;
+    --ec-ink-soft: #2b2b2b;
+    /* Neutrals — light mode: white canvas */
+    --ec-bg: #ffffff;
     --ec-surface: #ffffff;
-    --ec-border: #e6e4df;
-    --ec-border-soft: #eeece7;
-    --ec-text: #1f2328;
-    --ec-text-soft: #6b6f76;
-    --ec-text-faint: #9a9da3;
-    --ec-text-on-ink: #f3f1ea;
-    --ec-text-on-ink-soft: #a7abb8;
+    --ec-border: #e3e3e3;
+    --ec-border-soft: #eeeeee;
+    --ec-border-strong: #d0d0d0;
+    --ec-text: #1a1a1a;
+    --ec-text-soft: #6b6b6b;
+    --ec-text-faint: #9a9a9a;
+    --ec-text-on-ink: #f5f5f5;
+    --ec-text-on-ink-soft: #b5b5b5;
+    --ec-scrollbar: #d5d5d5;
     /* Status */
     --ec-success: #1f8a5f;
     --ec-success-bg: #e7f5ee;
-    --ec-warning: #b8863b;
-    --ec-warning-bg: #faf1e0;
+    --ec-warning: #a9c5a0;
+    --ec-warning-bg: #eef3ec;
+    --ec-warning-bg-strong: #dfe9da;
     --ec-danger: #c0392b;
     --ec-danger-bg: #fbeae8;
+    --ec-danger-bg-strong: #f6d5d1;
     /* Shape & motion */
     --ec-radius-sm: 8px;
     --ec-radius: 12px;
     --ec-radius-lg: 18px;
-    --ec-shadow-sm: 0 1px 2px rgba(23, 26, 33, .06);
-    --ec-shadow: 0 6px 20px rgba(23, 26, 33, .06);
-    --ec-shadow-lg: 0 16px 40px rgba(23, 26, 33, .10);
+    --ec-shadow-sm: 0 1px 2px rgba(0, 0, 0, .06);
+    --ec-shadow: 0 6px 20px rgba(0, 0, 0, .06);
+    --ec-shadow-lg: 0 16px 40px rgba(0, 0, 0, .10);
     --ec-ease: cubic-bezier(.4, 0, .2, 1);
     --font-display: "Plus Jakarta Sans", "Segoe UI", sans-serif;
     --font-body: "Inter", "Segoe UI", sans-serif;
+}
+
+/* Dark mode — same sage accent, black canvas */
+[data-theme="dark"] {
+    --ec-brass: #a9c5a0;
+    --ec-brass-light: rgba(169, 197, 160, .16);
+    --ec-brass-deep: #c3dabc;
+    --ec-brass-rgb: 169, 197, 160;
+    --ec-ink: #181818;
+    --ec-ink-soft: #2a2a2a;
+    --ec-bg: #0f0f0f;
+    --ec-surface: #212121;
+    --ec-border: #303030;
+    --ec-border-soft: #272727;
+    --ec-border-strong: #3f3f3f;
+    --ec-text: #f1f1f1;
+    --ec-text-soft: #aaaaaa;
+    --ec-text-faint: #717171;
+    --ec-text-on-ink: #ffffff;
+    --ec-text-on-ink-soft: #c9c9c9;
+    --ec-scrollbar: #3f3f3f;
+    --ec-success: #2ecc8f;
+    --ec-success-bg: rgba(46, 204, 143, .12);
+    --ec-warning: #a9c5a0;
+    --ec-warning-bg: rgba(169, 197, 160, .12);
+    --ec-warning-bg-strong: rgba(169, 197, 160, .22);
+    --ec-danger: #e0564a;
+    --ec-danger-bg: rgba(224, 86, 74, .14);
+    --ec-danger-bg-strong: rgba(224, 86, 74, .24);
+    --ec-shadow-sm: 0 1px 2px rgba(0, 0, 0, .4);
+    --ec-shadow: 0 6px 20px rgba(0, 0, 0, .45);
+    --ec-shadow-lg: 0 16px 40px rgba(0, 0, 0, .55);
+}
+
+/* Smooth theme transitions */
+body, .header, .footer, .categories-sidebar, .category-card,
+.details-modal, .auth-modal, .drawer, .modal-backdrop {
+    transition: background-color .2s var(--ec-ease), color .2s var(--ec-ease), border-color .2s var(--ec-ease);
 }
 
 /* Reset and Base Styles */
@@ -82,7 +126,7 @@ body {
 .logo {
     font-size: 1.6rem;
     font-weight: 800;
-    color: var(--ec-ink);
+    color: var(--ec-text);
     text-decoration: none;
     font-family: var(--font-display);
     letter-spacing: .3px;
@@ -213,10 +257,9 @@ body {
     display: flex;
     gap: 0.75rem;
     overflow-x: auto;
-    padding-bottom: 0.75rem;
-    margin-bottom: 0.5rem;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+    justify-content: flex-start;
+    padding-inline: calc(50vw - 180px);
+    padding: 3px;
 }
 
     .categories-mobile::-webkit-scrollbar {
@@ -224,27 +267,50 @@ body {
     }
 
 .category-btn-mobile {
-    flex-shrink: 0;
+    flex: 0 0 auto;
+    min-width: 80px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.35rem;
-    padding: 0.35rem;
-    background-color: var(--ec-surface);
-    border: none;
-    border-radius: var(--ec-radius-sm);
-    cursor: pointer;
-    transition: all 0.2s;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: var(--ec-surface);
+    border: 2px solid transparent;
+    border-radius: 16px;
+    transition: all 0.25s ease;
 }
 
     .category-btn-mobile:hover {
-        background-color: var(--ec-bg);
+        transform: translateY(-2px);
     }
 
+    /* Active */
     .category-btn-mobile.active {
-        background-color: var(--ec-brass-light);
-        box-shadow: 0 0 0 2px var(--ec-brass);
+        border-color: var(--ec-brass);
+        background: rgba(212, 175, 55, 0.12);
     }
+
+/* Circle Image */
+.category-image-mobile-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid transparent;
+    transition: all 0.25s ease;
+}
+
+.category-btn-mobile.active .category-image-mobile-wrapper {
+    border-color: var(--ec-brass);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+}
+
+.category-image-mobile {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
 
 /* Image (replaces the old icon) shown for each category on mobile */
 .category-image-mobile-wrapper {
@@ -291,6 +357,7 @@ body {
         width: 240px;
         flex-shrink: 0;
         background: var(--ec-ink);
+        border: 1px solid var(--ec-border);
         color: var(--ec-text-on-ink);
         border-radius: var(--ec-radius-lg);
         padding: 20px 14px;
@@ -448,10 +515,12 @@ body {
     border-radius: var(--ec-radius-lg);
     box-shadow: var(--ec-shadow-sm);
     overflow: hidden;
-    transition: box-shadow 0.2s var(--ec-ease), transform 0.2s var(--ec-ease);
+    transition: box-shadow 0.2s var(--ec-ease), transform 0.2s var(--ec-ease), background-color 0.2s var(--ec-ease), border-color 0.2s var(--ec-ease);
 }
 
     .product-card:hover {
+        background-color: var(--ec-brass-light);
+        border-color: var(--ec-brass);
         box-shadow: var(--ec-shadow-lg);
         transform: translateY(-4px);
     }
@@ -630,6 +699,7 @@ body {
     border-radius: 9999px;
     cursor: pointer;
     transition: background-color 0.2s;
+    left : 1rem;
 }
 
     .modal-close:hover {
@@ -809,7 +879,7 @@ body {
 .social-divider span {
     position: relative;
     padding: 0 0.5rem;
-    background-color: white;
+    background-color: var(--ec-surface);
     font-size: 0.875rem;
     color: var(--ec-text-soft);
 }
@@ -903,7 +973,7 @@ body {
 
     .btn-outline:hover {
         background-color: var(--ec-surface);
-        color: var(--ec-ink);
+        color: var(--ec-text);
     }
 
 .mobile-toggle {
@@ -948,10 +1018,10 @@ body {
 .btn-outline-mobile {
     width: 100%;
     padding: 0.75rem 2rem;
-    border: 2px solid var(--ec-ink);
+    border: 2px solid var(--ec-text);
     border-radius: 9999px;
     background: none;
-    color: var(--ec-ink);
+    color: var(--ec-text);
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;

@@ -3,10 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewData["Title"] - Elegant Corner</title>
+    <title>@ViewData["Title"] - Modern Corner</title>
     <!-- Shared styles -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
+    <!-- Set theme before first paint to avoid a flash of the wrong theme -->
+    <script>
+        (function () {
+            var saved = localStorage.getItem('ec-theme');
+            var theme = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        })();
+    </script>
 </head>
 <body>
 
@@ -15,7 +23,7 @@
     ════════════════════════════════════════════════════════════════ -->
     <header class="header">
         <div class="header-content">
-            <a asp-controller="Home" asp-action="Index" class="logo">Elegant Corner</a>
+            <a asp-controller="Home" asp-action="Index" class="logo">Modern Corner</a>
 
             <div class="header-actions">
                 <!-- Admin Panel (only visible when signed in) -->
@@ -28,6 +36,17 @@
                         <span class="admin-btn-label">Admin</span>
                     </a>
                 }
+                <!-- Theme toggle -->
+                <button id="themeToggleBtn" class="icon-btn" aria-label="Toggle dark mode">
+                    <svg id="themeIconSun" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <circle cx="12" cy="12" r="4"></circle>
+                        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+                    </svg>
+                    <svg id="themeIconMoon" class="icon hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+
                 <!-- Favorites -->
                 <button id="favoritesBtn" class="icon-btn" aria-label="Favorites">
                     <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -69,7 +88,7 @@
     ════════════════════════════════════════════════════════════════ -->
     <footer class="footer">
         <div class="footer-content">
-            <p>&copy; 2025 Elegant Corner. All rights reserved.</p>
+            <p>&copy; 2025 Modern Corner. All rights reserved.</p>
         </div>
     </footer>
 
@@ -268,6 +287,33 @@
          SHARED SCRIPTS  (loaded on every page)
     ════════════════════════════════════════════════════════════════ -->
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        (function () {
+            var toggleBtn = document.getElementById('themeToggleBtn');
+            var sunIcon = document.getElementById('themeIconSun');
+            var moonIcon = document.getElementById('themeIconMoon');
+
+            function updateIcon(theme) {
+                if (theme === 'dark') {
+                    sunIcon.classList.add('hidden');
+                    moonIcon.classList.remove('hidden');
+                } else {
+                    sunIcon.classList.remove('hidden');
+                    moonIcon.classList.add('hidden');
+                }
+            }
+
+            updateIcon(document.documentElement.getAttribute('data-theme') || 'light');
+
+            toggleBtn.addEventListener('click', function () {
+                var current = document.documentElement.getAttribute('data-theme') || 'light';
+                var next = current === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', next);
+                localStorage.setItem('ec-theme', next);
+                updateIcon(next);
+            });
+        })();
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

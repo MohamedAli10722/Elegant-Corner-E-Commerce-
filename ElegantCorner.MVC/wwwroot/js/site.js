@@ -438,20 +438,6 @@ function renderProductDetails(product) {
                     </svg>
                     <span id="detailsCartText">Add to Cart - $${product.price.toFixed(2)}</span>
                 </button>
-                <div class="details-additional-info">
-                    <div class="info-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        <span>Free shipping on orders over $50</span>
-                    </div>
-                    <div class="info-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        <span>30-day return policy</span>
-                    </div>
-                    <div class="info-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        <span>Secure checkout</span>
-                    </div>
-                </div>
             </div>
         </div>`;
 }

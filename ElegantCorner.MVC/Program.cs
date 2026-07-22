@@ -74,7 +74,7 @@ builder.Services.AddScoped<IOrderService,    OrderService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IProductAdminService, ProductAdminService>();
-builder.Services.AddScoped<IProductAdminService, ProductAdminService>();
+//builder.Services.AddScoped<IProductAdminService, ProductAdminService>();
 builder.Services.AddScoped<ICategoryAdminService, CategoryAdminService>();
 
 // ── MVC + API ─────────────────────────────────────────────────────────────────

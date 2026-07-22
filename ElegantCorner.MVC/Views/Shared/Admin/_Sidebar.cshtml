@@ -14,11 +14,11 @@
     }
 }
 
-<aside class="sidebar">
+<aside class="sidebar" id="adminSidebar">
 
     <div class="sidebar-header">
 
-        <h2>Elegant Corner</h2>
+        <h2>Modern Corner</h2>
 
         <span>Admin Panel</span>
 
@@ -30,9 +30,8 @@
            asp-action="Dashboard"
            class="@IsActive("Admin", "Dashboard")">
 
-            <span>🏠</span>
-
-            Dashboard
+            <span class="sidebar-icon">🏠</span>
+            <span class="sidebar-label">Dashboard</span>
 
         </a>
 
@@ -40,9 +39,8 @@
            asp-action="Categories"
            class="@IsActive("Admin", "Categories")">
 
-            <span>📂</span>
-
-            Categories
+            <span class="sidebar-icon">📂</span>
+            <span class="sidebar-label">Categories</span>
 
         </a>
 
@@ -50,9 +48,8 @@
            asp-action="Products"
            class="@IsActive("Admin", "Products")">
 
-            <span>🛋️</span>
-
-            Products
+            <span class="sidebar-icon">🛋️</span>
+            <span class="sidebar-label">Products</span>
 
         </a>
 
@@ -60,9 +57,8 @@
            asp-action="Orders"
            class="@IsActive("Admin", "Orders")">
 
-            <span>🛒</span>
-
-            Orders
+            <span class="sidebar-icon">🛒</span>
+            <span class="sidebar-label">Orders</span>
 
         </a>
 
@@ -70,12 +66,14 @@
            asp-action="Settings"
            class="@IsActive("Admin", "Settings")">
 
-            <span>⚙️</span>
-
-            Settings
+            <span class="sidebar-icon">⚙️</span>
+            <span class="sidebar-label">Settings</span>
 
         </a>
 
     </nav>
 
 </aside>
+
+<!-- Backdrop shown behind the sidebar when it's opened as a mobile drawer -->
+<div class="sidebar-overlay" id="adminSidebarOverlay"></div>
