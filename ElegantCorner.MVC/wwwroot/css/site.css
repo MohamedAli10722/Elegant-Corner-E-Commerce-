@@ -699,7 +699,6 @@ body {
     border-radius: 9999px;
     cursor: pointer;
     transition: background-color 0.2s;
-    left : 1rem;
 }
 
     .modal-close:hover {
@@ -738,6 +737,11 @@ body {
     position: absolute;
     top: 1rem;
     right: 1rem;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     z-index: 30;
     background-color: rgba(255,255,255,0.8);
 }
@@ -1705,4 +1709,78 @@ body {
 .admin-btn:hover {
     background: var(--ec-ink-soft);
     color: white;
+}
+
+/* ===========================
+   Admin User Avatar + Popover
+=========================== */
+
+.admin-user-menu {
+    position: relative;
+}
+
+.admin-user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--ec-brass), var(--ec-brass-deep));
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: box-shadow 0.2s var(--ec-ease);
+}
+
+    .admin-user-avatar:hover,
+    .admin-user-avatar[aria-expanded="true"] {
+        box-shadow: 0 0 0 3px var(--ec-brass-light);
+    }
+
+.admin-user-popover {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    min-width: 220px;
+    background: var(--ec-surface);
+    border: 1px solid var(--ec-border);
+    border-radius: var(--ec-radius-lg);
+    box-shadow: var(--ec-shadow-lg);
+    padding: 16px;
+    z-index: 30;
+    text-align: center;
+}
+
+    .admin-user-popover.hidden {
+        display: none;
+    }
+
+.admin-user-popover-avatar {
+    width: 44px;
+    height: 44px;
+    margin: 0 auto 10px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--ec-brass), var(--ec-brass-deep));
+    color: #fff;
+    font-size: 17px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-user-popover-name {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--ec-text);
+    margin-bottom: 4px;
+}
+
+.admin-user-popover-email {
+    font-size: 13px;
+    color: var(--ec-text-soft);
+    word-break: break-all;
 }
